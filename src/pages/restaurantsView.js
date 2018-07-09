@@ -1,19 +1,20 @@
 import React from "react";
 import { connect } from "react-redux";
-import { fetchRestaurants } from "../actions/restaurants";
+import { fetchRestaurants } from "../actions/restaurantsActions";
+import { user } from "../actions/userActions";
 import * as api from "../api/kinveyRequester";
 
 class RestaurantsList extends React.Component {
 	componentWillMount() {
 		api.getUser();
-	}
-	componentDidMount() {
+		api.isUserAdmin().then(response => {
+			this.props.dispatch(user(response));
+		});
 		this.props.dispatch(fetchRestaurants());
 	}
 
 	render() {
-		const { error, loading, restaurants } = this.props;
-		console.log(restaurants.restaurants);
+		const { error, loading, restaurants, isAdmin } = this.props;
 		if (error) {
 			return <div>Error! {error.message}</div>;
 		}
@@ -33,6 +34,7 @@ class RestaurantsList extends React.Component {
 }
 
 const mapStateToProps = state => ({
+	isAdmin: state.isAdmin,
 	restaurants: state.items,
 	loading: state.loading,
 	error: state.error

@@ -1,14 +1,21 @@
-import * as types from '../constants/ActionTypes'
 
-const initialState = 0;
+import restaurants from '../reducers/restaurantsReducer';
+import users from '../reducers/usersReducer';
+import initialState from './initialState';
 
-export default function updateCounter(state = initialState, action) {
+const reducers = [
+  restaurants,
+  users
+];
+
+// Combine reducers
+export default function reducer(state = initialState, action) {
+  let newState;
   switch (action.type) {
-    case types.INCREMENT:
-      return state + 1
-    case types.DECREMENT:
-      return state - 1
+    // Put global reducers here
     default:
-      return state
+      newState = state;
+      break;
   }
+  return reducers.reduce((s, r) => r(s, action), newState);
 }

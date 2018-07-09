@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@material-ui/core": "latest",
+    "axios": "^0.18.0",
     "kinvey-javascript-sdk-core": "^3.2.0",
     "prop-types": "latest",
     "react": "latest",

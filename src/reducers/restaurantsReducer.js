@@ -3,12 +3,7 @@ import {
 	FETCH_RESTAURANTS_SUCCESS,
 	FETCH_RESTAURANTS_FAILURE
 } from '../constants/ActionTypes';
-
-const initialState = {
-	items: [],
-	loading: false,
-	error: null
-};
+import initialState from './initialState';
 
 export default function restaurantsReducer(state = initialState, action) {
 	switch(action.type) {
