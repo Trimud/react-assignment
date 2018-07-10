@@ -7,11 +7,8 @@ import { user } from "../actions/userActions";
 import * as api from "../api/kinveyRequester";
 import { withStyles } from '@material-ui/core/styles';
 import withRoot from '../withRoot';
-import GridList from '@material-ui/core/GridList';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import GridListTile from '@material-ui/core/GridListTile';
-import GridListTileBar from '@material-ui/core/GridListTileBar';
-// import SingleLineGrid from '../components/includes/SingleLineGrid';
+import SingleLineGrid from '../components/includes/SingleLineGrid';
 
 const styles = theme => ({
   '@global': {
@@ -34,18 +31,6 @@ const styles = theme => ({
     justifyContent: 'space-around',
     overflow: 'hidden',
     backgroundColor: theme.palette.background.paper
-  },
-  gridList: {
-    flexWrap: 'nowrap',
-    // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
-    transform: 'translateZ(0)',
-  },
-  title: {
-    color: '#fff',
-  },
-  titleBar: {
-    background:
-      'linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
   },
   progressWrapper: {
     textAlign: 'center'
@@ -82,24 +67,7 @@ class Index extends Component {
 
     return (
       <div className={classes.root}>
-
-        <GridList className={classes.gridList} cols={1.5}>
-          {restaurants.map(restaurant => (
-            <GridListTile key={restaurant._id}>
-              <img
-                src={restaurant.image._downloadURL}
-                alt={restaurant.name}
-              />
-              <GridListTileBar
-                title={restaurant.name}
-                classes={{
-                  root: classes.titleBar,
-                  title: classes.title,
-                }}
-              />
-            </GridListTile>
-          ))}
-        </GridList>
+        <SingleLineGrid data={restaurants} />
       </div>
     );
   }
