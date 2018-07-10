@@ -28,35 +28,45 @@ const styles = theme => ({
 	}
 });
 
+// Shuffle array order so that we don't always show same restaurants initially
+const shuffleArray = arr => (
+	arr
+	  .map(a => [Math.random(), a])
+	  .sort((a, b) => a[0] - b[0])
+	  .map(a => a[1])
+);
+
 class SingleLineGrid extends Component {
 	render() {
 		const { classes, data } = this.props;
-		const restaurants = data;
+		const restaurants = shuffleArray(data);
 		return (
-			<GridList className={classes.gridList} cols={1.5}>
-			  {restaurants.map(restaurant => (
-				<GridListTile key={restaurant._id}>
-				  <img
-					src={restaurant.image._downloadURL}
-					alt={restaurant.name}
-				  />
-				  <GridListTileBar
-					title={restaurant.name}
-					classes={{
-					  root: classes.titleBar,
-					  title: classes.title,
-					}}
-				  />
-				</GridListTile>
-			  ))}
-			</GridList>
+			<div className={classes.root}>
+				<GridList className={classes.gridList} cols={1.5}>
+				{restaurants.map(restaurant => (
+					<GridListTile key={restaurant._id}>
+					<img
+						src={restaurant.image._downloadURL}
+						alt={restaurant.name}
+					/>
+					<GridListTileBar
+						title={restaurant.name}
+						classes={{
+						root: classes.titleBar,
+						title: classes.title,
+						}}
+					/>
+					</GridListTile>
+				))}
+				</GridList>
+			</div>
 		)
 	}
 }
 
 SingleLineGrid.propTypes = {
 	classes: PropTypes.object.isRequired,
-	data: PropTypes.object.isRequired
+	data: PropTypes.array.isRequired
 };
 
 export default withRoot(withStyles(styles)(SingleLineGrid));

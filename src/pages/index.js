@@ -9,6 +9,7 @@ import { withStyles } from '@material-ui/core/styles';
 import withRoot from '../withRoot';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import SingleLineGrid from '../components/includes/SingleLineGrid';
+import RecipeReviewCard from '../components/includes/Card';
 
 const styles = theme => ({
   '@global': {
@@ -30,7 +31,6 @@ const styles = theme => ({
     flexWrap: 'wrap',
     justifyContent: 'space-around',
     overflow: 'hidden',
-    backgroundColor: theme.palette.background.paper
   },
   progressWrapper: {
     textAlign: 'center'
@@ -68,6 +68,7 @@ class Index extends Component {
     return (
       <div className={classes.root}>
         <SingleLineGrid data={restaurants} />
+        <RecipeReviewCard data={restaurants} />
       </div>
     );
   }
