@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@material-ui/core": "latest",
+    "@material-ui/icons": "^1.1.0",
     "axios": "^0.18.0",
     "kinvey-javascript-sdk-core": "^3.2.0",
     "prop-types": "latest",
@@ -11,6 +12,7 @@
     "react-dom": "latest",
     "react-redux": "^5.0.7",
     "react-scripts": "latest",
+    "recompose": "^0.27.1",
     "redux": "^4.0.0",
     "redux-thunk": "^2.3.0"
   },

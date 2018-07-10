@@ -1,19 +1,29 @@
-import * as types from '../constants/ActionTypes';
+import {
+	SET_USER_TYPE_ADMIN,
+	SET_USER_TYPE_REGULAR,
+	SET_USER_TYPE_DUMMY
+} from '../constants/ActionTypes';
 
-export function user(isAdmin) {
+export function user(userType) {
 	return dispatch => {
-		if (isAdmin) {
+		if (userType === 'admin') {
 			dispatch(setUserAdmin());
-		} else {
+		} else if (userType === 'regular') {
 			dispatch(setUserRegular());
+		} else {
+			dispatch(setUserDummy());
 		}
 	};
 }
 
 export const setUserAdmin = () => ({
-	type: types.SET_USER_TYPE_ADMIN
+	type: SET_USER_TYPE_ADMIN
 });
 
 export const setUserRegular = restaurants => ({
-	type: types.SET_USER_TYPE_REGULAR
+	type: SET_USER_TYPE_REGULAR
+});
+
+export const setUserDummy = restaurants => ({
+	type: SET_USER_TYPE_DUMMY
 });

@@ -1,116 +1,122 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogActions from '@material-ui/core/DialogActions';
-import Typography from '@material-ui/core/Typography';
+import compose from 'recompose/compose';
+import { connect } from "react-redux";
+import { fetchRestaurants } from "../actions/restaurantsActions";
+import { user } from "../actions/userActions";
+import * as api from "../api/kinveyRequester";
 import { withStyles } from '@material-ui/core/styles';
 import withRoot from '../withRoot';
+import GridList from '@material-ui/core/GridList';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import GridListTile from '@material-ui/core/GridListTile';
+import GridListTileBar from '@material-ui/core/GridListTileBar';
+// import SingleLineGrid from '../components/includes/SingleLineGrid';
 
 const styles = theme => ({
-  root: {
-    textAlign: 'center',
-    paddingTop: theme.spacing.unit * 20,
+  '@global': {
+    html: {
+      background: theme.palette.background.default,
+      WebkitFontSmoothing: 'antialiased', // Antialiasing.
+      MozOsxFontSmoothing: 'grayscale', // Antialiasing.
+      boxSizing: 'border-box'
+    },
+    '*, *:before, *:after': {
+      boxSizing: 'inherit',
+    },
+    body: {
+      margin: 0,
+    }
   },
+  root: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'space-around',
+    overflow: 'hidden',
+    backgroundColor: theme.palette.background.paper
+  },
+  gridList: {
+    flexWrap: 'nowrap',
+    // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
+    transform: 'translateZ(0)',
+  },
+  title: {
+    color: '#fff',
+  },
+  titleBar: {
+    background:
+      'linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
+  },
+  progressWrapper: {
+    textAlign: 'center'
+  },
+  progress: {
+    margin: theme.spacing.unit * 2
+  }
 });
 
-class Index extends React.Component {
-  constructor(props) {
-    super(props);
-    this.incrementAsync = this.incrementAsync.bind(this);
-    this.incrementIfOdd = this.incrementIfOdd.bind(this);
+class Index extends Component {
+	componentWillMount() {
+		api.getUser();
+		api.isUserAdmin().then(response => {
+			this.props.dispatch(user(response));
+		});
+    this.props.dispatch(fetchRestaurants());
   }
 
-  incrementIfOdd() {
-    if (this.props.value % 2 !== 0) {
-      this.props.onIncrement()
-    }
+  componentDidMount() {
+    // ...
   }
-
-  incrementAsync() {
-    setTimeout(this.props.onIncrement, 1000)
-  }
-
-
-
-  state = {
-    open: false,
-  };
-
-  handleClose = () => {
-    this.setState({
-      open: false,
-    });
-  };
-
-  handleClick = () => {
-    this.setState({
-      open: true,
-    });
-  };
 
   render() {
-    const { classes } = this.props;
-    const { open } = this.state;
+		const { classes, error, loading, restaurants } = this.props;
+		if (error) {
+			return <div>Error! {error.message}</div>;
+		}
 
-    const { value, onIncrement, onDecrement } = this.props;
+		if (loading) {
+			return <div className={classes.progressWrapper}>
+        <CircularProgress className={classes.progress} size={50} />
+      </div>;
+    }
 
     return (
       <div className={classes.root}>
-        <Dialog open={open} onClose={this.handleClose}>
-          <DialogTitle>Super Secret Password</DialogTitle>
-          <DialogContent>
-            <DialogContentText>1-2-3-4-5</DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button color="primary" onClick={this.handleClose}>
-              OK
-            </Button>
-          </DialogActions>
-        </Dialog>
-        <Typography variant="display1" gutterBottom>
-          Material-UI
-        </Typography>
-        <Typography variant="subheading" gutterBottom>
-          example project
-        </Typography>
-        <Button variant="contained" color="secondary" onClick={this.handleClick}>
-          Super Secret Password
-        </Button>
 
-        
-        <p>
-          Clicked: {value} times
-          {' '}
-          <button onClick={onIncrement}>
-            +
-          </button>
-          {' '}
-          <button onClick={onDecrement}>
-            -
-          </button>
-          {' '}
-          <button onClick={this.incrementIfOdd}>
-            Increment if odd
-          </button>
-          {' '}
-          <button onClick={this.incrementAsync}>
-            Increment async
-          </button>
-        </p>
+        <GridList className={classes.gridList} cols={1.5}>
+          {restaurants.map(restaurant => (
+            <GridListTile key={restaurant._id}>
+              <img
+                src={restaurant.image._downloadURL}
+                alt={restaurant.name}
+              />
+              <GridListTileBar
+                title={restaurant.name}
+                classes={{
+                  root: classes.titleBar,
+                  title: classes.title,
+                }}
+              />
+            </GridListTile>
+          ))}
+        </GridList>
       </div>
     );
   }
 }
 
+const mapStateToProps = state => ({
+	userType: state.userType,
+	restaurants: state.items,
+	loading: state.loading,
+	error: state.error
+});
+
 Index.propTypes = {
-  classes: PropTypes.object.isRequired,
-  value: PropTypes.number.isRequired,
-  onIncrement: PropTypes.func.isRequired,
-  onDecrement: PropTypes.func.isRequired
+  classes: PropTypes.object.isRequired
 };
 
-export default withRoot(withStyles(styles)(Index));
+export default withRoot(compose(
+  withStyles(styles),
+  connect(mapStateToProps),
+)(Index));

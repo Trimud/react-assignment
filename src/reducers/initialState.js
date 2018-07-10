@@ -1,5 +1,5 @@
 const initialState = {
-	isAdmin: false,
+	userType: 'dummy',
 	items: [],
 	loading: false,
 	error: null

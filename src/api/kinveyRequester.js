@@ -32,17 +32,20 @@ export function getUser() {
 	}
 	promise
 	  .then(function(activeUser) {
-		if (!activeUser) {
-		  // Autogenerate user as requested by Kinvey
-		  promise = Kinvey.User.signup()
-			.then(function(user) {})
-			.catch(function(error) {
-			  console.log('Couldn\'t create new user: ' + error);
-			});
-		}
+			console.log(activeUser);
+			if (!activeUser) {
+				// Autogenerate user as requested by Kinvey
+				promise = Kinvey.User.signup()
+					.then(function(user) {
+						// ...
+					})
+					.catch(function(error) {
+						console.log('Couldn\'t create new user: ' + error);
+					});
+			}
 	  })
 	  .catch(function(error) {
-		console.log('Set active user error: ' + error);
+			console.log('Set active user error: ' + error);
 	  });
 }
 
@@ -54,6 +57,23 @@ export function logoutUser() {
 }
 
 export function isUserAdmin() {
+	let activeUser = Kinvey.User.getActiveUser();
+	return axiosUserInstance.get(`user/kid_S1aNYuwzX/${activeUser.data._id}/roles`)
+		.then(response => {
+			if (response.data[0].roleId === config.adminRole) {
+				// User is admin
+				return true;
+			} else {
+				return false;
+			}
+		})
+		.catch(function (error) {
+			console.log({error});
+			return false;
+		})
+}
+
+export function getUserType() {
 	let activeUser = Kinvey.User.getActiveUser();
 	return axiosUserInstance.get(`user/kid_S1aNYuwzX/${activeUser.data._id}/roles`)
 		.then(response => {

@@ -1,6 +1,7 @@
 import {
 	SET_USER_TYPE_ADMIN,
-	SET_USER_TYPE_REGULAR
+	SET_USER_TYPE_REGULAR,
+	SET_USER_TYPE_DUMMY
 } from '../constants/ActionTypes';
 import initialState from './initialState';
 
@@ -10,13 +11,19 @@ export default function usersReducer(state = initialState, action) {
 		// Set the state to true
 		return {
 			...state,
-			isAdmin: true
+			userType: 'admin'
 		};
 		case SET_USER_TYPE_REGULAR:
 		// Set the state to false
 		return {
 			...state,
-			isAdmin: false
+			userType: 'regular'
+		};
+		case SET_USER_TYPE_DUMMY:
+		// Set the state to false
+		return {
+			...state,
+			userType: 'dummy'
 		};
 		default:
 			// ALWAYS have a default case in a reducer
