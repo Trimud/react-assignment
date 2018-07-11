@@ -9,8 +9,8 @@ import { fetchRestaurants } from "../actions/restaurantsActions";
 import withRoot from '../withRoot';
 import { withStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import SingleLineGrid from '../components/includes/SingleLineGrid';
-import RecipeReviewCard from '../components/includes/Card';
+import SingleLineGrid from '../components/SingleLineGrid';
+import RecipeReviewCard from '../components/Card';
 
 const styles = theme => ({
   '@global': {

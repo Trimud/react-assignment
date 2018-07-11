@@ -4,7 +4,7 @@ import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import withRoot from '../../withRoot';
+import withRoot from '../withRoot';
 
 const styles = theme => ({
 	root: {
