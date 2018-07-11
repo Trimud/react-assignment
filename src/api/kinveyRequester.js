@@ -1,91 +1,59 @@
 import Kinvey from 'kinvey-javascript-sdk-core';
-import axios from 'axios';
 
 const config = {
 	baseURL     : 'https://baas.kinvey.com/',
 	appKey      : 'kid_S1aNYuwzX',
 	appSecret   : 'e38f2de0279846f9991071b81a0e01f5',
-	masterSecret: '2fbe9e77a2934439b08a6769913734c2',
-	adminRole   : '04282d57-98df-41c5-9c40-f70f813bc8e6'
+	adminRoleID   : '04282d57-98df-41c5-9c40-f70f813bc8e6'
 };
 
-let promise = Kinvey.init({
+Kinvey.init({
 	appKey    : config.appKey,
 	appSecret : config.appSecret
 });
 
-let axiosUserInstance = axios.create({
-  baseURL: config.baseURL,
-	timeout: 3000,
-	responseType: 'json',
-	auth: {
-    username: config.appKey,
-    password: config.masterSecret
-  }
-});
-
-export function getUser() {
+export const getUser = () => {
 	let activeUser = Kinvey.User.getActiveUser();
-	promise = Promise.resolve(activeUser);
-	if (activeUser !== null) {
-	  promise = activeUser.me();
+	let promise = Promise.resolve(activeUser);
+
+	if (activeUser === null) {
+		return promise = Kinvey.User.login('test', 'test')
+			.then(
+				(user) => {
+					activeUser = Kinvey.User.getActiveUser();
+					return activeUser;
+			}).catch(
+				(error) => {
+					console.log('Could not login test user', error);
+			});
 	}
-	promise
-	  .then(function(activeUser) {
-			console.log(activeUser);
-			if (!activeUser) {
-				// Autogenerate user as requested by Kinvey
-				promise = Kinvey.User.signup()
-					.then(function(user) {
-						// ...
-					})
-					.catch(function(error) {
-						console.log('Couldn\'t create new user: ' + error);
-					});
-			}
-	  })
-	  .catch(function(error) {
-			console.log('Set active user error: ' + error);
-	  });
+
+	promise = activeUser.me();
+	return Promise.resolve(activeUser);
 }
 
-export function loginUser(username, password) {
-	Kinvey.User.login('yuriy.boev@gmail.com', 'platinum');
+export const loginUser = (username, password) => {
+	let promise = Kinvey.User.login(username, password)
+  .then(function(user) {
+		console.log({user});
+  })
+  .catch(function(error) {
+		console.log('Login user error', error);
+  });
 }
-export function logoutUser() {
+
+export const logoutUser = () => {
 	Kinvey.User.logout();
-}
-
-export function isUserAdmin() {
-	let activeUser = Kinvey.User.getActiveUser();
-	return axiosUserInstance.get(`user/kid_S1aNYuwzX/${activeUser.data._id}/roles`)
-		.then(response => {
-			if (response.data[0].roleId === config.adminRole) {
-				// User is admin
-				return true;
-			} else {
-				return false;
-			}
-		})
-		.catch(function (error) {
-			console.log({error});
-			return false;
-		})
+	Kinvey.User.login('test', 'test');
 }
 
 export function getUserType() {
 	let activeUser = Kinvey.User.getActiveUser();
-	return axiosUserInstance.get(`user/kid_S1aNYuwzX/${activeUser.data._id}/roles`)
-		.then(response => {
-			if (response.data[0].roleId === config.adminRole) {
-				// User is admin
-				return true;
-			} else {
-				return false;
-			}
-		})
-		.catch(function (error) {
-			console.log({error});
-			return false;
-		})
+
+	if (activeUser && 'roles' in activeUser.data._kmd && activeUser.data._kmd.roles[0].roleId === config.adminRoleID) {
+		// User is admin
+		return 'admin';
+	} else {
+		return 'dummy';
+	}
 }

@@ -66,7 +66,7 @@ const styles = theme => ({
     backgroundColor: theme.palette.primary.main,
 	},
 	site: {
-		marginTop: 20
+		marginTop: 8
 	}
 });
 
