@@ -1,22 +1,26 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import configureStore from './store/configureStore';
+import { Route, Switch } from 'react-router';
+import { ConnectedRouter } from 'connected-react-router';
+import store, { history } from './store/configureStore';
 
-// import RestaurantsList from './pages/restaurantsView';
-import Index from './pages/Index';
 import Header from './components/Header';
+import Index from './pages/Index';
 
-const rootEl = document.getElementById('root');
-
-const store = configureStore();
+const storeConfig = store();
 
 ReactDOM.render(
-	<Provider store={store}>
-		<div>
-			<Header />
-			<Index />
-		</div>
+	<Provider store={storeConfig}>
+		<ConnectedRouter history={history}>
+			<div>
+				<Header />
+				<Switch>
+					<Route exact path="/" render={() => (<Index />)} />
+					<Route render={() => (<div>Missing page</div>)} />
+				</Switch>
+			</div>
+		</ConnectedRouter>
 	</Provider>,
-	rootEl
+	document.getElementById('root')
 )

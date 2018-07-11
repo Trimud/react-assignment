@@ -2,11 +2,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import compose from 'recompose/compose';
 import * as api from "../api/kinveyRequester";
-import { fetchRestaurants } from "../actions/restaurantsActions";
 import { connect } from "react-redux";
+import { Route } from 'react-router';
 import { user } from "../actions/userActions";
-import { withStyles } from '@material-ui/core/styles';
+import { fetchRestaurants } from "../actions/restaurantsActions";
 import withRoot from '../withRoot';
+import { withStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import SingleLineGrid from '../components/includes/SingleLineGrid';
 import RecipeReviewCard from '../components/includes/Card';
@@ -51,12 +52,7 @@ class Index extends Component {
   }
 
   componentDidMount() {
-      // .then(function(user) {
-      //   this.props.dispatch(fetchRestaurants());
-      // }).catch(function(error) {
-      //   console.log('Could not login test user: ' + error);
-      // });
-    // const getUserType = api.getUserType();
+    // ...
   }
 
   render() {

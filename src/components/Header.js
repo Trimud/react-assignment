@@ -11,6 +11,8 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import { withStyles } from '@material-ui/core/styles';
 import withRoot from '../withRoot';
+// Router imports
+import { Route, Link } from 'react-router';
 
 const styles = theme => ({
   root: {
