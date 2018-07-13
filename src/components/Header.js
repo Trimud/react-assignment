@@ -4,15 +4,14 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
+import HomeIcon from '@material-ui/icons/Home';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import Food from '@material-ui/icons/RestaurantMenu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import { withStyles } from '@material-ui/core/styles';
 import withRoot from '../withRoot';
-// Router imports
-import { Route, Link } from 'react-router';
+import { Link } from 'react-router-dom';
 
 const styles = theme => ({
   root: {
@@ -31,6 +30,13 @@ const styles = theme => ({
   },
   logoIcon: {
 	  verticalAlign: 'middle'
+  },
+  homeMenuLink: {
+    color: '#fff'
+  },
+  menuLink: {
+    color: 'rgba(0, 0, 0, 0.87)',
+    textDecoration: 'none'
   }
 });
 
@@ -62,7 +68,7 @@ class Header extends React.Component {
         <AppBar position="static" className={classes.header}>
           <Toolbar>
             <IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
-              <MenuIcon />
+              <Link to="/" className={classes.homeMenuLink} id="home"><HomeIcon /></Link>
             </IconButton>
             <Typography variant="title" color="inherit" className={classes.flex}>
               <Food className={classes.logoIcon}/> Foodelicious
@@ -91,8 +97,12 @@ class Header extends React.Component {
                   open={open}
                   onClose={this.handleClose}
                 >
-                  <MenuItem onClick={this.handleClose}>Profile</MenuItem>
-                  <MenuItem onClick={this.handleClose}>My account</MenuItem>
+                  <MenuItem onClick={this.handleClose}>
+                    <Link to="/login" className={classes.menuLink}>Login</Link>
+                  </MenuItem>
+                  <MenuItem onClick={this.handleClose}>
+                    <Link to="/register" className={classes.menuLink}>Register</Link>
+                  </MenuItem>
                 </Menu>
               </div>
             )}

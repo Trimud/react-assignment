@@ -1,7 +1,10 @@
 import {
 	FETCH_RESTAURANTS_BEGIN,
 	FETCH_RESTAURANTS_SUCCESS,
-	FETCH_RESTAURANTS_FAILURE
+	FETCH_RESTAURANTS_FAILURE,
+	FETCH_RESTAURANT_DATA_BEGIN,
+	FETCH_RESTAURANT_DATA_SUCCESS,
+	FETCH_RESTAURANT_DATA_FAILURE
 } from '../constants/ActionTypes';
 import initialState from './initialState';
 
@@ -23,7 +26,6 @@ export default function restaurantsReducer(state = initialState, action) {
 			loading: false,
 			items: action.payload
 		};
-
 		case FETCH_RESTAURANTS_FAILURE:
 		// The request failed, but it did stop, so set loading to "false".
 		// Save the error, and we can display it somewhere
@@ -36,7 +38,29 @@ export default function restaurantsReducer(state = initialState, action) {
 			error: action.payload.error,
 			items: []
 		};
-
+		case FETCH_RESTAURANT_DATA_BEGIN:
+		// Get Restaurant Begin
+		return {
+			...state,
+			loading: true,
+			error: null
+		};
+		case FETCH_RESTAURANT_DATA_SUCCESS:
+		// Get Restaurant Data
+		console.log(action.payload);
+		return {
+			...state,
+			loading: false,
+			restaurantData: action.payload
+		};
+		case FETCH_RESTAURANT_DATA_FAILURE:
+		// Get Restaurant ID
+		return {
+			...state,
+			loading: false,
+			error: action.payload.error,
+			restaurantData: []
+		};
 		default:
 			// ALWAYS have a default case in a reducer
 			return state;

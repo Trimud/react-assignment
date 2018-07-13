@@ -13,9 +13,13 @@
     "react-dom": "latest",
     "react-redux": "^5.0.7",
     "react-router": "^4.3.1",
+    "react-router-dom": "^4.3.1",
     "react-scripts": "latest",
     "recompose": "^0.27.1",
     "redux": "^4.0.0",
+    "redux-form": "^7.4.2",
+    "redux-form-material-ui": "^5.0.0-beta.3",
+    "redux-form-website-template": "0.0.123",
     "redux-thunk": "^2.3.0"
   },
   "scripts": {

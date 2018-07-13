@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import compose from 'recompose/compose';
-import * as api from "../api/kinveyRequester";
+import { getUser, getUserType } from "../api/kinveyRequester";
 import { connect } from "react-redux";
-import { Route } from 'react-router';
 import { user } from "../actions/userActions";
 import { fetchRestaurants } from "../actions/restaurantsActions";
 import withRoot from '../withRoot';
 import { withStyles } from '@material-ui/core/styles';
+import { withRouter } from 'react-router-dom';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import SingleLineGrid from '../components/SingleLineGrid';
 import RecipeReviewCard from '../components/Card';
@@ -43,12 +43,11 @@ const styles = theme => ({
 
 class Index extends Component {
 	componentWillMount() {
-    let promise = api.getUser();
+    let promise = getUser();
     promise.then(function(response) {
       this.props.dispatch(fetchRestaurants());
-      this.props.dispatch(user(api.getUserType()));
+      this.props.dispatch(user(getUserType()));
     }.bind(this));
-
   }
 
   componentDidMount() {
@@ -56,7 +55,8 @@ class Index extends Component {
   }
 
   render() {
-		const { classes, error, loading, restaurants } = this.props;
+    const { classes, error, loading, restaurants } = this.props;
+
 		if (error) {
 			return <div>Error! {error.message}</div>;
 		}
@@ -89,5 +89,6 @@ Index.propTypes = {
 
 export default withRoot(compose(
   withStyles(styles),
-  connect(mapStateToProps),
+  withRouter,
+  connect(mapStateToProps)
 )(Index));

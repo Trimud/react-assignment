@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 // import { Link } from 'react-router';
-import { withStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardMedia from '@material-ui/core/CardMedia';
@@ -13,6 +12,12 @@ import Typography from '@material-ui/core/Typography';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import ShareIcon from '@material-ui/icons/Share';
 import LanguageIcon from '@material-ui/icons/Language';
+import { Link } from 'react-router-dom';
+import compose from 'recompose/compose';
+import { connect } from "react-redux";
+import withRoot from '../withRoot';
+import { withStyles } from '@material-ui/core/styles';
+import { withRouter } from 'react-router-dom';
 
 const styles = theme => ({
 	root: {
@@ -52,16 +57,6 @@ const styles = theme => ({
   actions: {
     display: 'flex',
   },
-  expand: {
-    transform: 'rotate(0deg)',
-    transition: theme.transitions.create('transform', {
-      duration: theme.transitions.duration.shortest,
-    }),
-    marginLeft: 'auto',
-  },
-  expandOpen: {
-    transform: 'rotate(180deg)',
-  },
   avatar: {
     backgroundColor: theme.palette.primary.main,
 	},
@@ -79,6 +74,7 @@ class RecipeReviewCard extends React.Component {
 
   render() {
     const { classes, data } = this.props;
+
     const restaurants = data;
 
     return (
@@ -99,11 +95,13 @@ class RecipeReviewCard extends React.Component {
             title={restaurant.name}
             subheader={restaurant.address}
           />
-          <CardMedia
-            className={classes.media}
-            image={restaurant.image._downloadURL}
-            title={restaurant.name}
-          />
+          <Link to={`/restaurant/${restaurant._id}`}>
+            <CardMedia
+              className={classes.media}
+              image={restaurant.image._downloadURL}
+              title={restaurant.name}
+            />
+          </Link>
           <CardContent>
             <Typography component="p">
               {restaurant.description.substring(0,130)+"..."}
@@ -124,8 +122,17 @@ class RecipeReviewCard extends React.Component {
   }
 }
 
+const mapStateToProps = state => ({
+  restaurantData: state.restaurantData
+});
+
 RecipeReviewCard.propTypes = {
   classes: PropTypes.object.isRequired,
+  restaurantData: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(RecipeReviewCard);
+export default withRoot(compose(
+  withStyles(styles),
+  withRouter,
+  connect(mapStateToProps)
+)(RecipeReviewCard));

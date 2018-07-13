@@ -25,6 +25,29 @@ export function fetchRestaurants() {
 	};
 }
 
+export function fetchSingleRestaurant(id) {
+	return dispatch => {
+		dispatch(fetchSingleRestaurantBegin());
+		let promise = Kinvey.ping();
+		promise.then(function(response) {
+			const dataStore = Kinvey.DataStore.collection('restaurants', Kinvey.DataStoreType.Cache);
+			var stream = dataStore.findById('5b3dee4e7f20c939e4273f9d');
+			stream.subscribe(function onNext(entity) {
+				console.log(entity);
+				dispatch(fetchSingleRestaurantSuccess(entity));
+				return entity;
+			}, function onError(error) {
+				dispatch(fetchSingleRestaurantFailure());
+			}, function onComplete() {
+				// ...
+			});
+		}, function(error) {
+			console.log('Kinvey.ping:ERROR:', error);
+		});
+
+	};
+}
+
 export const fetchRestaurantsBegin = () => ({
 	type: types.FETCH_RESTAURANTS_BEGIN
 });
@@ -36,5 +59,19 @@ export const fetchRestaurantsSuccess = restaurants => ({
 
 export const fetchRestaurantsFailure = error => ({
 	type: types.FETCH_RESTAURANTS_FAILURE,
+	payload: { error }
+});
+
+export const fetchSingleRestaurantBegin = () => ({
+	type: types.FETCH_RESTAURANT_DATA_BEGIN
+});
+
+export const fetchSingleRestaurantSuccess = restaurant => ({
+	type: types.FETCH_RESTAURANT_DATA_SUCCESS,
+	payload: restaurant
+});
+
+export const fetchSingleRestaurantFailure = error => ({
+	type: types.FETCH_RESTAURANT_DATA_FAILURE,
 	payload: { error }
 });

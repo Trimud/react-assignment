@@ -33,13 +33,25 @@ export const getUser = () => {
 }
 
 export const loginUser = (username, password) => {
-	let promise = Kinvey.User.login(username, password)
-  .then(function(user) {
-		console.log({user});
-  })
-  .catch(function(error) {
-		console.log('Login user error', error);
-  });
+	return Kinvey.User.logout()
+		.then(function(response) {
+			return Kinvey.User.login(username, password)
+			.then(function(user) {
+				console.log('Logged in user', user);
+				return true;
+			})
+			.catch(function(error) {
+				console.log('Login user error', error);
+				return false;
+			});
+		})
+		.catch(function(error) {
+			console.log('Logout user error', error);
+			return false;
+		});
+
+	// let activeUser = Kinvey.User.getActiveUser();
+	// return Promise.resolve(activeUser);
 }
 
 export const logoutUser = () => {
@@ -49,6 +61,7 @@ export const logoutUser = () => {
 
 export function getUserType() {
 	let activeUser = Kinvey.User.getActiveUser();
+	console.log('getUserType', activeUser);
 
 	if (activeUser && 'roles' in activeUser.data._kmd && activeUser.data._kmd.roles[0].roleId === config.adminRoleID) {
 		// User is admin
