@@ -1,4 +1,4 @@
-# Create React App example
+# SoftUni React Course assignment
 
 ## How to use
 
