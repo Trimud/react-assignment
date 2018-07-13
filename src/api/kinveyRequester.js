@@ -61,8 +61,6 @@ export const logoutUser = () => {
 
 export function getUserType() {
 	let activeUser = Kinvey.User.getActiveUser();
-	console.log('getUserType', activeUser);
-
 	if (activeUser && 'roles' in activeUser.data._kmd && activeUser.data._kmd.roles[0].roleId === config.adminRoleID) {
 		// User is admin
 		return 'admin';

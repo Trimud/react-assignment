@@ -53,10 +53,6 @@ const styles = theme => ({
 class RestaurantCard extends React.Component {
   state = { expanded: false };
 
-  handleExpandClick = () => {
-    this.setState(state => ({ expanded: !state.expanded }));
-  };
-
   render() {
     const { classes, data } = this.props;
 

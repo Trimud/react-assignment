@@ -11,6 +11,7 @@
     "prop-types": "latest",
     "react": "latest",
     "react-dom": "latest",
+    "react-google-maps": "^9.4.5",
     "react-redux": "^5.0.7",
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",

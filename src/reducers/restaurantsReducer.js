@@ -47,7 +47,6 @@ export default function restaurantsReducer(state = initialState, action) {
 		};
 		case FETCH_RESTAURANT_DATA_SUCCESS:
 		// Get Restaurant Data
-		console.log(action.payload);
 		return {
 			...state,
 			loading: false,

@@ -31,9 +31,8 @@ export function fetchSingleRestaurant(id) {
 		let promise = Kinvey.ping();
 		promise.then(function(response) {
 			const dataStore = Kinvey.DataStore.collection('restaurants', Kinvey.DataStoreType.Cache);
-			var stream = dataStore.findById('5b3dee4e7f20c939e4273f9d');
+			var stream = dataStore.findById(id);
 			stream.subscribe(function onNext(entity) {
-				console.log(entity);
 				dispatch(fetchSingleRestaurantSuccess(entity));
 				return entity;
 			}, function onError(error) {
